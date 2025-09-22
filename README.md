@@ -8,6 +8,19 @@ Este proyecto consiste en un sistema de monitoreo de calidad del aire basado en 
 
 > \[NOTA\] El proyecto permite monitoreo en tiempo real, registro histórico de datos y alertas automáticas según la calidad del aire.
 
+🚀 **Acceso Rápido**
+====================
+
+> Conecta con el proyecto en tiempo real 🔴
+
+🌐 **Dashboard en Vivo**
+
+[https://mq135-frontend.onrender.com](https://mq135-frontend.onrender.com)
+
+🖥️ **API REST**
+
+[https://mq135.onrender.com](https://mq135.onrender.com)
+
 🛠 Microcontrolador: ESP8266
 ----------------------------
 
