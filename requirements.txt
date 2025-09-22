@@ -4,4 +4,4 @@ pyodbc
 sqlalchemy
 gunicorn
 pymssql
-flask-cors
+flask_cors
