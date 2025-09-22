@@ -20,11 +20,20 @@ class Lectura(db.Model):
 
 @app.route('/api/lectura', methods=['POST'])
 def guardar_lectura():
-    data = request.json
-    nueva = Lectura(Valor=data['valor'])
-    db.session.add(nueva)
-    db.session.commit()
-    return jsonify({"mensaje": "Lectura guardada correctamente"}), 201
+    try:
+        data = request.json
+        if not data or 'valor' not in data:
+            return jsonify({"error": "Falta el campo 'valor'"}), 400
+
+        nueva = Lectura(Valor=data['valor'])
+        db.session.add(nueva)
+        db.session.commit()
+        return jsonify({"mensaje": "Lectura guardada correctamente"}), 201
+
+    except Exception as e:
+        # Esto devuelve el error exacto en Postman
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route('/api/lectura', methods=['GET'])
 def obtener_lecturas():
