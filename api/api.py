@@ -31,5 +31,10 @@ def obtener_lecturas():
     lecturas = Lectura.query.order_by(Lectura.Fecha.desc()).limit(20).all()
     return jsonify([{"valor": l.Valor, "fecha": l.Fecha.isoformat()} for l in lecturas])
 
+@app.route('/')
+def home():
+    return jsonify({"mensaje": "API MQ135 funcionando correctamente 🚀"})
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
