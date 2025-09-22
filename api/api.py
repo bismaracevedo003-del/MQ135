@@ -4,10 +4,9 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-
+# Cambiamos de pyodbc a pymssql
 app.config['SQLALCHEMY_DATABASE_URI'] = (
-    "mssql+pyodbc://bismar-ac_SQLLogin_1:uex7yg16hs@MQ135esp8266.mssql.somee.com/MQ135esp8266"
-    "?driver=ODBC+Driver+17+for+SQL+Server&TrustServerCertificate=yes"
+    "mssql+pymssql://bismar-ac_SQLLogin_1:uex7yg16hs@MQ135esp8266.mssql.somee.com:1433/MQ135esp8266"
 )
 
 db = SQLAlchemy(app)
@@ -31,9 +30,8 @@ def guardar_lectura():
         return jsonify({"mensaje": "Lectura guardada correctamente"}), 201
 
     except Exception as e:
-        # Esto devuelve el error exacto en Postman
+        # Devuelve el error exacto en Postman
         return jsonify({"error": str(e)}), 500
-
 
 @app.route('/api/lectura', methods=['GET'])
 def obtener_lecturas():
@@ -43,7 +41,6 @@ def obtener_lecturas():
 @app.route('/')
 def home():
     return jsonify({"mensaje": "API MQ135 funcionando correctamente 🚀"})
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
