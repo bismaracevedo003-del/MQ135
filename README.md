@@ -6,7 +6,7 @@
 
 Este proyecto consiste en un sistema de monitoreo de calidad del aire basado en IoT. Utiliza un **ESP8266** y el sensor **MQ-135** para medir gases contaminantes y enviar los datos a un **dashboard web** en tiempo real.
 
-> \[!NOTA\] El proyecto permite monitoreo en tiempo real, registro histórico de datos y alertas automáticas según la calidad del aire.
+> \[NOTA\] El proyecto permite monitoreo en tiempo real, registro histórico de datos y alertas automáticas según la calidad del aire.
 
 🛠 Microcontrolador: ESP8266
 ----------------------------
