@@ -5,7 +5,7 @@ export default function App() {
 
   const fetchLecturas = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/lectura");
+      const res = await fetch("https://mq135.onrender.com/api/lectura");
       const data = await res.json();
       setLecturas(data);
     } catch (error) {
