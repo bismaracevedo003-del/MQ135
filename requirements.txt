@@ -1,7 +1,0 @@
-flask
-flask_sqlalchemy
-pyodbc
-sqlalchemy
-gunicorn
-pymssql
-flask_cors
