@@ -31,31 +31,47 @@ El servicio expone dos endpoints principales:
 
 ### 1️⃣ Verificar estado de la API
 
-**GET http://:5000/**
+**GET http://:Ip o Nombre de dominio/**
 
 **Respuesta:**
-
-{ "mensaje": "API MQ135 funcionando correctamente 🚀" }   
-
+```json
+{
+"mensaje": "API MQ135 funcionando correctamente"
+}   
+```
 ### 2️⃣ Guardar una nueva lectura
 
-**POST http://:5000/api/lectura**
+**POST http://:Ip o Nombre de dominio/api/lectura**
 
 **Body (JSON):**
-
-{    "valor": 452.33  }   
-
+```json
+{
+"valor": 452.33
+}   
+```
 **Respuesta:**
-
-{    "mensaje": "Lectura guardada correctamente"  }   
-
+```json
+{
+"mensaje": "Lectura guardada correctamente"
+}   
+```
 ### 3️⃣ Obtener las últimas 20 lecturas
 
-**GET http://:5000/api/lectura**
+**GET http://:Ip o Nombre de dominio/api/lectura**
 
 **Respuesta:**
-
- [    {      "valor": 452.33,      "fecha": "2025-09-22T18:25:43.511Z"    },    {      "valor": 312.10,      "fecha": "2025-09-22T18:15:10.322Z"    }  ]   
+```json
+[
+  {
+    "valor": 452.33,
+    "fecha": "2025-09-22T18:25:43.511Z"
+  },
+  {
+    "valor": 312.10,
+    "fecha": "2025-09-22T18:15:10.322Z"
+  }
+]
+ ``` 
 
 ⚠️ Notas de Seguridad
 ---------------------
