@@ -26,11 +26,11 @@ while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < timeout) {
 }
 
 if (WiFi.status() == WL_CONNECTED) {
-    Serial.println("\n✅ Conectado a WiFi!");
+    Serial.println("\n Conectado a WiFi!");
     Serial.print("Dirección IP: ");
     Serial.println(WiFi.localIP());
 } else {
-    Serial.println("\n❌ No se pudo conectar a WiFi. Verifica tu SSID y contraseña.");
+    Serial.println("\n No se pudo conectar a WiFi. Verifica tu SSID y contraseña.");
 }
 
 }
