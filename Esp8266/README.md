@@ -18,15 +18,13 @@ Este proyecto utiliza un **ESP8266** y el sensor **MQ-135** para medir la calida
 📌 Conexiones
 -------------
 
-MQ-135             - ESP8266 
+| Pin del MQ-135 | Pin del ESP8266 |
+|----------------|----------------|
+| **VCC**        | **5V**         |
+| **GND**        | **GND**        |
+| **AOUT**       | **A0**         |
+| **DOUT(opcional)**       |                |
 
-VCC                - 5V
-
-GND                - GND
-
-AOUT               - A0
-
-DOUT(opcional)
 
 📡 Funcionamiento
 -----------------
@@ -55,8 +53,11 @@ DOUT(opcional)
 
 El código hace un **HTTP POST** al endpoint /api/lectura enviando un JSON con el valor leído:
 
-{    "valor": 452.33  }   
-
+```json
+{
+  "valor": 452.33
+}  
+```
 El backend debe almacenar la lectura en una base de datos o mostrarla en un dashboard.
 
 ⚠️ Notas Importantes
