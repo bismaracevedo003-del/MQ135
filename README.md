@@ -59,7 +59,7 @@ Descripción: Sensor de gases para detectar contaminación del aire, incluyendo 
 
 **Conexión con ESP8266:**
 
-AOUT (analógico) → Pin A0 del ESP8266  DOUT (digital)  → GPIO para detectar umbral  VCC             → 5V  GND             → GND   `
+AOUT (analógico) → Pin A0 del ESP8266  DOUT (digital)  → GPIO para detectar umbral  VCC             → 5V  GND             → GND   
 
 **Notas importantes:**
 
@@ -102,7 +102,11 @@ ESP8266 + MQ-135 → API Flask → Base de datos SQL → Frontend React → Dash
 
 **Tabla Lecturas:**
 
-CREATE TABLE Lecturas (      Id INT IDENTITY(1,1) PRIMARY KEY,      Valor FLOAT NOT NULL,      Fecha DATETIME DEFAULT GETDATE()  );   
+CREATE TABLE Lecturas (      
+Id INT IDENTITY(1,1) PRIMARY KEY,      
+Valor FLOAT NOT NULL,      
+Fecha DATETIME DEFAULT GETDATE()  
+);   
 
 **Campos:**
 
@@ -122,7 +126,7 @@ pip install flask flask_cors flask_sqlalchemy pyodbc sqlalchemy gunicorn
 
 **Frontend (React + Vite):**
 
-npm install react react-dom vite   `
+npm install react react-dom vite   
 
 **Microcontrolador (ESP8266 - Arduino IDE):**
 
