@@ -131,6 +131,7 @@ npm install react react-dom vite
 **Microcontrolador (ESP8266 - Arduino IDE):**
 
 #include <ESP8266WiFi.h>
+
 #include <ESP8266HTTPClient.h>
 
 ✅ Mejores Prácticas IoT
