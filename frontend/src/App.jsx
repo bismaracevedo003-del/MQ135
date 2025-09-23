@@ -7,7 +7,7 @@ import {
   Tooltip,
   CartesianGrid,
   ResponsiveContainer,
-} from "recharts"; // 📊 Librería para graficar datos en React
+} from "recharts"; //  Librería para graficar datos en React
 
 export default function App() {
   // Estados principales
