@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"; 
+import { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -7,44 +7,40 @@ import {
   Tooltip,
   CartesianGrid,
   ResponsiveContainer,
-} from "recharts"; //  Librería para graficar datos en React
+} from "recharts"; // Librería para graficar datos
 
 export default function App() {
   // Estados principales
-  const [lecturas, setLecturas] = useState([]);            // Guarda las lecturas recibidas de la API
-  const [ultimaLectura, setUltimaLectura] = useState(null); // Guarda la última lectura
-  const [espOnline, setEspOnline] = useState(false);        // Indica si el ESP8266 está en línea
-  const [segundosDesdeUltima, setSegundosDesdeUltima] = useState(0); // Tiempo en segundos desde la última lectura
+  const [lecturas, setLecturas] = useState([]);            // Últimas 20 lecturas
+  const [ultimaLectura, setUltimaLectura] = useState(null); // Última lectura
+  const [espOnline, setEspOnline] = useState(false);        // Estado del ESP8266
+  const [segundosDesdeUltima, setSegundosDesdeUltima] = useState(0); // Segundos desde la última lectura
 
-  // Ajusta la fecha UTC de la API a la zona horaria de Nicaragua (GMT-6)
+  // Ajusta la fecha UTC a la zona horaria de Nicaragua (GMT-6)
   const ajustarZonaHoraria = (fechaUTC) => {
-    const offsetHoras = 6; 
+    const offsetHoras = 6;
     return new Date(new Date(fechaUTC).getTime() - offsetHoras * 60 * 60 * 1000);
   };
 
-  // Función para obtener lecturas de la API
+  // Obtiene lecturas desde la API
   const fetchLecturas = async () => {
     try {
-      const res = await fetch("https://mq135.onrender.com/api/lectura"); // Llama a la API
+      const res = await fetch("https://mq135.onrender.com/api/lectura");
       const data = await res.json();
 
       if (data.length > 0) {
-        // Ordena las lecturas por fecha (más recientes primero)
         const ordenadas = [...data].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-        // Toma las últimas 20 y las invierte para mostrarlas en orden cronológico
-        const ultimasLecturas = ordenadas.slice(0, 20).reverse();
-        const ultima = ordenadas[0]; // Toma la lectura más reciente
-        const fechaAjustada = ajustarZonaHoraria(ultima.fecha); // Ajusta la fecha
+        const ultimasLecturas = ordenadas.slice(0, 20).reverse(); // Últimas 20 en orden cronológico
+        const ultima = ordenadas[0];
+        const fechaAjustada = ajustarZonaHoraria(ultima.fecha);
         const ahora = new Date();
-        const diferenciaSegundos = Math.floor((ahora - fechaAjustada) / 1000); // Tiempo desde la última lectura
+        const diferenciaSegundos = Math.floor((ahora - fechaAjustada) / 1000);
 
-        // Actualiza los estados
         setLecturas(ultimasLecturas);
         setUltimaLectura({ ...ultima, fecha: fechaAjustada });
         setSegundosDesdeUltima(diferenciaSegundos);
-        setEspOnline(diferenciaSegundos < 30); // Si pasaron menos de 30 seg, se considera "online"
+        setEspOnline(diferenciaSegundos < 30); // Online si < 30s
       } else {
-        // Si no hay lecturas, reinicia los estados
         setLecturas([]);
         setUltimaLectura(null);
         setEspOnline(false);
@@ -52,7 +48,6 @@ export default function App() {
       }
     } catch (error) {
       console.error("Error al obtener lecturas:", error);
-      // Si hubo error en la API, resetea los estados
       setLecturas([]);
       setUltimaLectura(null);
       setEspOnline(false);
@@ -60,43 +55,41 @@ export default function App() {
     }
   };
 
-  // Efecto para cargar lecturas al inicio y actualizar cada 5 segundos
+  // Efecto: actualizar lecturas cada 5 segundos
   useEffect(() => {
-    fetchLecturas(); // Obtiene lecturas al montar el componente
-    const interval = setInterval(fetchLecturas, 5000); // Repite cada 5s
-    return () => clearInterval(interval); // Limpia el intervalo cuando el componente se desmonta
+    fetchLecturas();
+    const interval = setInterval(fetchLecturas, 5000);
+    return () => clearInterval(interval);
   }, []);
 
-  // Efecto para actualizar en tiempo real el contador de segundos desde la última lectura
+  // Efecto: actualizar contador de segundos desde la última lectura cada 1 segundo
   useEffect(() => {
     const timer = setInterval(() => {
       if (ultimaLectura) {
         const ahora = new Date();
         const diferencia = Math.floor((ahora - new Date(ultimaLectura.fecha)) / 1000);
         setSegundosDesdeUltima(diferencia);
-        setEspOnline(diferencia < 30); // Marca como offline si pasan más de 30s sin nueva lectura
+        setEspOnline(diferencia < 30);
       }
     }, 1000);
-    return () => clearInterval(timer); // Limpia el intervalo al desmontar
+    return () => clearInterval(timer);
   }, [ultimaLectura]);
 
-  // Función para determinar la calidad del aire según el valor en ppm
+  // Determina la calidad del aire según ppm
   const calidadAire = (ppm) => {
-    if (ppm <= 300) return { texto: "Bueno ✅", color: "#4CAF50" };   // Verde
-    else if (ppm <= 600) return { texto: "Medio ⚠️", color: "#FF9800" }; // Naranja
-    else return { texto: "Mala 🚨", color: "#F44336" };              // Rojo
+    if (ppm <= 300) return { texto: "Bueno ✅", color: "#4CAF50" };
+    else if (ppm <= 600) return { texto: "Medio ⚠️", color: "#FF9800" };
+    else return { texto: "Mala 🚨", color: "#F44336" };
   };
 
-  // Función para mostrar el tiempo transcurrido en un formato más legible
+  // Formato legible de tiempo
   const formatoTiempo = (segundos) => {
-    if (segundos < 60) return `${segundos} seg`; // Solo segundos
-    if (segundos < 3600) return `${Math.floor(segundos / 60)} min ${segundos % 60} seg`; // Minutos + seg
+    if (segundos < 60) return `${segundos} seg`;
+    if (segundos < 3600) return `${Math.floor(segundos / 60)} min ${segundos % 60} seg`;
     const horas = Math.floor(segundos / 3600);
     const minutos = Math.floor((segundos % 3600) / 60);
-    return `${horas} h ${minutos} min`; // Horas + min
+    return `${horas} h ${minutos} min`;
   };
-}
-
 
   return (
     <div
@@ -245,4 +238,4 @@ export default function App() {
       </div>
     </div>
   );
-
+}
