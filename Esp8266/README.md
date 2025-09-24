@@ -7,9 +7,11 @@ Este proyecto utiliza un **ESP8266** y el sensor **MQ-135** para medir la calida
 ----------------------
 
 *   **ESP8266** (NodeMCU, Wemos D1 mini, etc.)
-    ![Esp8266](frontend/public/Pines_esp8266.jpg)
+    <img src="../frontend/public/Pines_esp8266.jpg" alt="ESP8266" width="200" height="auto"/>
 
 *   **Sensor MQ-135**
+    <img src="../frontend/public/Sensor_MQ-135.jpg" alt="ESP8266" width="200" height="auto"/>
+
     
 *   Cable USB para programación
     
