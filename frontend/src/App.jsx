@@ -83,13 +83,21 @@ export default function App() {
   };
 
   // Formato legible de tiempo
-  const formatoTiempo = (segundos) => {
-    if (segundos < 60) return `${segundos} seg`;
-    if (segundos < 3600) return `${Math.floor(segundos / 60)} min ${segundos % 60} seg`;
+const formatoTiempo = (segundos) => {
+  if (segundos < 60) return `${segundos} seg`; // Menos de un minuto
+  if (segundos < 3600) return `${Math.floor(segundos / 60)} min ${segundos % 60} seg`; // Menos de una hora
+  if (segundos < 86400) { // Menos de un día
     const horas = Math.floor(segundos / 3600);
     const minutos = Math.floor((segundos % 3600) / 60);
     return `${horas} h ${minutos} min`;
-  };
+  }
+  // Para más de un día
+  const dias = Math.floor(segundos / 86400);
+  const horas = Math.floor((segundos % 86400) / 3600);
+  const minutos = Math.floor((segundos % 3600) / 60);
+  return `${dias} d ${horas} h ${minutos} min`;
+};
+
 
   return (
     <div
