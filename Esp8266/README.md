@@ -12,7 +12,7 @@ Este proyecto utiliza un **ESP8266** y el sensor **MQ-135** para medir la calida
 
 *   **Sensor MQ-135**
 
-    <img src="../frontend/public/Sensor_MQ-135.jpg" alt="ESP8266" width="200" height="auto"/>
+    <img src="../frontend/public/Sensor_MQ-135.jpg" alt="ESP8266" width="400" height="auto"/>
 
     
 *   Cable USB para programación
