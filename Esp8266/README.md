@@ -3,7 +3,11 @@
 
 Este proyecto utiliza un **ESP8266** y el sensor **MQ-135** para medir la calidad del aire y enviar los datos en tiempo real a un servidor web mediante **HTTP POST**.La lectura se muestra en el **Monitor Serie** con una clasificación de la calidad del aire: **Buena, Moderada o Mala**.
 
+🛠️ Hardware Necesario
+----------------------
 
+*   **ESP8266** (NodeMCU, Wemos D1 mini, etc.)
+    ![ESP8266](frontend/public/Pines_esp8266.jpg)
 *   **Sensor MQ-135**
     
 *   Cable USB para programación
@@ -46,11 +50,6 @@ Este proyecto utiliza un **ESP8266** y el sensor **MQ-135** para medir la calida
 
 🌐 API Backend
 --------------
-🛠️ Hardware Necesario
-----------------------
-
-*   **ESP8266** (NodeMCU, Wemos D1 mini, etc.)
-    ![Esp8266](frontend/public/Pines%20esp8266.jpg
 
 El código hace un **HTTP POST** al endpoint /api/lectura enviando un JSON con el valor leído:
 
