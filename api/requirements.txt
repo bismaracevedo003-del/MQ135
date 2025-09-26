@@ -5,3 +5,4 @@ sqlalchemy
 gunicorn
 pymssql
 flask_cors
+dotenv
