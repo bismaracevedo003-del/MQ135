@@ -1,61 +1,91 @@
-# Importamos las dependencias principales
-from flask import Flask, request, jsonify        # Flask para crear la API, request para obtener datos, jsonify para devolver JSON
-from flask_sqlalchemy import SQLAlchemy          # ORM para interactuar con la base de datos
-from flask_cors import CORS                      # Para habilitar CORS y permitir peticiones desde el frontend
-from datetime import datetime                    # Para registrar la fecha/hora de cada lectura
+import os
+from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
+from datetime import datetime
+from dotenv import load_dotenv  # Para cargar variables desde .env
+import logging
 
-# Inicializamos la aplicación Flask
-app = Flask(__name__)
-CORS(app)  # Habilita CORS para todas las rutas (necesario si el frontend está en otro dominio)
+# ---------------- Configuración inicial ---------------- #
+# Cargar variables de entorno
+load_dotenv()
 
-# Configuración de la base de datos SQL Server usando pymssql
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    "mssql+pymssql://bismar-ac_SQLLogin_1:uex7yg16hs@MQ135esp8266.mssql.somee.com:1433/MQ135esp8266"
+# Configurar logs
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[logging.StreamHandler()]
 )
 
-# Inicializamos la conexión a la base de datos
+# Inicializar Flask
+app = Flask(__name__)
+CORS(app)
+
+# Configuración de la base de datos
+DB_USER = os.getenv("DB_USER")
+DB_PASS = os.getenv("DB_PASS")
+DB_HOST = os.getenv("DB_HOST")
+DB_NAME = os.getenv("DB_NAME")
+
+if not all([DB_USER, DB_PASS, DB_HOST, DB_NAME]):
+    raise ValueError("Faltan variables de entorno para la conexión a la base de datos")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    f"mssql+pymssql://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}"
+)
+
 db = SQLAlchemy(app)
 
-# Definición del modelo de la tabla 'Lecturas'
+# ---------------- Definición del modelo ---------------- #
 class Lectura(db.Model):
-    __tablename__ = 'Lecturas'                          # Nombre de la tabla en la base de datos
-    Id = db.Column(db.Integer, primary_key=True)         # Columna Id (clave primaria autoincremental)
-    Valor = db.Column(db.Float, nullable=False)          # Columna Valor (almacena ppm del sensor)
-    Fecha = db.Column(db.DateTime, default=datetime.utcnow)  # Columna Fecha (se llena automáticamente con la fecha actual)
+    __tablename__ = 'Lecturas'
+    Id = db.Column(db.Integer, primary_key=True)
+    Valor = db.Column(db.Float, nullable=False)
+    Fecha = db.Column(db.DateTime, default=datetime.utcnow)
 
-# Ruta para guardar una nueva lectura (POST)
+# ---------------- Rutas API ---------------- #
 @app.route('/api/lectura', methods=['POST'])
 def guardar_lectura():
     try:
-        data = request.json  # Obtiene el JSON enviado en la petición
-        if not data or 'valor' not in data:  # Valida que exista el campo 'valor'
+        data = request.json
+        if not data or 'valor' not in data:
             return jsonify({"error": "Falta el campo 'valor'"}), 400
 
-        # Crea un nuevo registro de lectura
-        nueva = Lectura(Valor=data['valor'])
-        db.session.add(nueva)   # Agrega la lectura a la sesión
-        db.session.commit()     # Guarda la lectura en la base de datos
+        valor = data['valor']
 
+        # Validación del valor
+        if not isinstance(valor, (int, float)):
+            return jsonify({"error": "El campo 'valor' debe ser numérico"}), 400
+        if valor < 0 or valor > 5000:
+            return jsonify({"error": "El valor debe estar entre 0 y 5000 ppm"}), 400
+
+        nueva = Lectura(Valor=valor)
+        db.session.add(nueva)
+        db.session.commit()
+
+        logging.info(f"Nueva lectura guardada: {valor} ppm")
         return jsonify({"mensaje": "Lectura guardada correctamente"}), 201
 
     except Exception as e:
-        # Si ocurre un error, lo devuelve en la respuesta para facilitar depuración en Postman
+        logging.error(f"Error al guardar lectura: {e}")
         return jsonify({"error": str(e)}), 500
 
-# Ruta para obtener las últimas 20 lecturas (GET)
+
 @app.route('/api/lectura', methods=['GET'])
 def obtener_lecturas():
-    # Consulta las últimas 20 lecturas ordenadas por fecha descendente
-    lecturas = Lectura.query.order_by(Lectura.Fecha.desc()).limit(20).all()
-    # Devuelve una lista de diccionarios con valor y fecha en formato ISO 8601
-    return jsonify([{"valor": l.Valor, "fecha": l.Fecha.isoformat()} for l in lecturas])
+    try:
+        lecturas = Lectura.query.order_by(Lectura.Fecha.desc()).limit(20).all()
+        return jsonify([{"valor": l.Valor, "fecha": l.Fecha.isoformat()} for l in lecturas])
+    except Exception as e:
+        logging.error(f"Error al obtener lecturas: {e}")
+        return jsonify({"error": str(e)}), 500
 
-# Ruta principal para verificar que la API está funcionando
+
 @app.route('/')
 def home():
     return jsonify({"mensaje": "API MQ135 funcionando correctamente"})
 
-# Ejecuta la aplicación en modo desarrollo escuchando en todas las interfaces (0.0.0.0) en el puerto 5000
+
+# ---------------- Ejecución ---------------- #
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-
