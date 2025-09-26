@@ -102,11 +102,13 @@ ESP8266 + MQ-135 → API Flask → Base de datos SQL → Frontend React → Dash
 
 **Tabla Lecturas:**
 
-CREATE TABLE Lecturas (      
-Id INT IDENTITY(1,1) PRIMARY KEY,      
-Valor FLOAT NOT NULL,      
-Fecha DATETIME DEFAULT GETDATE()  
-);   
+```sql
+CREATE TABLE Lecturas (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Valor FLOAT NOT NULL,
+    Fecha DATETIME DEFAULT GETDATE()
+);
+```
 
 **Campos:**
 
